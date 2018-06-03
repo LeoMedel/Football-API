@@ -43,6 +43,7 @@ public class LeagueAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
+
         View itemView = view;
 
         if (view == null) {

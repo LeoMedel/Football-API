@@ -20,7 +20,11 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".League" />
-        <activity android:name=".LeagueActivity"></activity>
+        <activity android:name=".LeagueActivity" />
+        <activity android:name=".TableActivity" />
+        <activity android:name=".GamesActivity" />
+        <activity android:name=".TeamsActivity" />
+        <activity android:name=".ChampionsTableActivity" />
     </application>
 
 </manifest>

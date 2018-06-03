@@ -3,6 +3,7 @@ package com.example.mkmkmk.footballapi;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -118,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
      * **/
     private void addCardsLeagues() {
 
-        List<League> leagueList = new ArrayList<>();
+        final List<League> leagueList = new ArrayList<>();
+
 
         try {
             //Boucle pour parcourir chaque Ligue dans le JSON des Ligues
@@ -133,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
                 String tableLeague = jsonLeague.getJSONObject("leagueTable").getString("href");
                 String gamesLeague = jsonLeague.getJSONObject("fixtures").getString("href");
                 String teamsLeague = jsonLeague.getJSONObject("teams").getString("href");
-
                 String leagueName = leagues.getString("caption")+" ("+leagues.getString("league") + ")";
                 String year = leagues.getString("year");
                 int numberGames = leagues.getInt("numberOfGames");
@@ -156,7 +157,15 @@ public class MainActivity extends AppCompatActivity {
 
                     Toast.makeText(MainActivity.this, ""+i, Toast.LENGTH_SHORT).show();
 
-                    Intent splash = new Intent(getApplicationContext(), League.class);
+                    Intent splash = new Intent(getApplicationContext(), LeagueActivity.class);
+
+                    splash.putExtra("league", leagueList.get(i).getLeague());
+                    splash.putExtra("urlTable", leagueList.get(i).getUrlTable());
+                    splash.putExtra("urlGames", leagueList.get(i).getUrlAllGames());
+                    splash.putExtra("urlTeams", leagueList.get(i).getUrlAllTeams());
+
+                    //splash.putParcelableArrayListExtra("leagueList", (ArrayList<? extends Parcelable>) leagueList);
+
                     startActivity(splash);
 
                 }
