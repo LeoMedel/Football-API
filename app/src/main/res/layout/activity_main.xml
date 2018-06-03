@@ -5,7 +5,7 @@
     android:id="@+id/menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_bright"
+    android:background="@android:color/background_dark"
     android:orientation="vertical"
     tools:context="com.example.mkmkmk.footballapi.MainActivity">
 
@@ -15,15 +15,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:fontFamily="casual"
         android:text="Voici vous pourrez trouver les differents Ligues disponibles"
-        android:textColor="@android:color/background_dark" />
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp" />
 
     <ProgressBar
         android:id="@+id/progressLeague"
-        style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="150dp"
         android:indeterminate="true" />
 
     <GridView
@@ -36,5 +39,6 @@
         android:layout_marginTop="40dp"
         android:horizontalSpacing="10dp"
         android:numColumns="2"
-        android:verticalSpacing="35dp" />
+        android:verticalSpacing="35dp"
+        android:visibility="gone" />
 </LinearLayout>

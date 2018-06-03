@@ -77,17 +77,33 @@ public class LeagueActivity extends AppCompatActivity {
 
     public void setGames(View view)
     {
-        Intent games = new Intent(getApplicationContext(), GamesActivity.class);
-        games.putExtra("urlGames", urlGames);
-        games.putExtra("league", nameLeague);
-        startActivity(games);
+        if (nameLeague.equals("Australian A-League (AAL)"))
+        {
+            Toast.makeText(this, "Games Indispnibles", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Intent games = new Intent(getApplicationContext(), GamesActivity.class);
+            games.putExtra("urlGames", urlGames);
+            games.putExtra("league", nameLeague);
+            startActivity(games);
+        }
+
     }
 
     public void setTeams(View view)
     {
-        Intent teams = new Intent(getApplicationContext(), TeamsActivity.class);
-        teams.putExtra("urlTeams", urlTeams);
-        teams.putExtra("league", nameLeague);
-        startActivity(teams);
+        if (nameLeague.equals("Australian A-League (AAL)"))
+        {
+            Toast.makeText(this, "Games Indispnibles", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Intent teams = new Intent(getApplicationContext(), TeamsActivity.class);
+            teams.putExtra("urlTeams", urlTeams);
+            teams.putExtra("league", nameLeague);
+            startActivity(teams);
+        }
+
     }
 }

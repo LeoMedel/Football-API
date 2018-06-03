@@ -106,10 +106,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            description.setText(result);
 
             addCardsLeagues();
 
+            listLeagues.setVisibility(View.VISIBLE);
             progress.setVisibility(View.GONE);
         }
     }
@@ -155,18 +155,24 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                    Toast.makeText(MainActivity.this, ""+i, Toast.LENGTH_SHORT).show();
+                    if (leagueList.get(i).getLeague().equals("Australian A-League (AAL)"))
+                    {
+                        Toast.makeText(MainActivity.this, "League Indispnible", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(MainActivity.this, ""+leagueList.get(i).getLeague(), Toast.LENGTH_SHORT).show();
 
-                    Intent splash = new Intent(getApplicationContext(), LeagueActivity.class);
+                        Intent splash = new Intent(getApplicationContext(), LeagueActivity.class);
 
-                    splash.putExtra("league", leagueList.get(i).getLeague());
-                    splash.putExtra("urlTable", leagueList.get(i).getUrlTable());
-                    splash.putExtra("urlGames", leagueList.get(i).getUrlAllGames());
-                    splash.putExtra("urlTeams", leagueList.get(i).getUrlAllTeams());
+                        splash.putExtra("league", leagueList.get(i).getLeague());
+                        splash.putExtra("urlTable", leagueList.get(i).getUrlTable());
+                        splash.putExtra("urlGames", leagueList.get(i).getUrlAllGames());
+                        splash.putExtra("urlTeams", leagueList.get(i).getUrlAllTeams());
 
-                    //splash.putParcelableArrayListExtra("leagueList", (ArrayList<? extends Parcelable>) leagueList);
+                        startActivity(splash);
+                    }
 
-                    startActivity(splash);
 
                 }
             });
