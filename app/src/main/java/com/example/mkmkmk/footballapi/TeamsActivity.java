@@ -1,5 +1,6 @@
 package com.example.mkmkmk.footballapi;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -168,6 +169,14 @@ public class TeamsActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     Toast.makeText(TeamsActivity.this, ""+teamList.get(i).getName(), Toast.LENGTH_SHORT).show();
+
+                    Intent info = new Intent(TeamsActivity.this, TeamInfoActivity.class);
+
+                    info.putExtra("team", teamList.get(i).getName()+" ("+teamList.get(i).getShotName()+")");
+                    info.putExtra("urlPlayers", teamList.get(i).getUrlPlayers());
+
+                    startActivity(info);
+
                 }
             });
 

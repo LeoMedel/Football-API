@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/txtPlayer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fontFamily="casual"
+    android:gravity="center_horizontal|center_vertical"
+    android:text="TextView"
+    android:textAlignment="center"
+    android:textColor="@android:color/background_dark"
+    android:textSize="24sp" />
