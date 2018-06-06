@@ -58,6 +58,13 @@ public class TeamInfoActivity extends AppCompatActivity {
         new downloadPlayers().execute(urlPlayers);
     }
 
+    public void setUbicationTeam(View view)
+    {
+        Intent teams = new Intent(getApplicationContext(), MapsActivity.class);
+        teams.putExtra("team", teamName);
+        startActivity(teams);
+    }
+
 
     public class downloadPlayers extends AsyncTask<String, String, String>{
 

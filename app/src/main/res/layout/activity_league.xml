@@ -11,6 +11,7 @@
         android:id="@+id/txtLigue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:background="@android:color/transparent"
         android:fontFamily="casual"
         android:text="LIGUE"
@@ -39,7 +40,7 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 app:srcCompat="@drawable/tableimg" />
 
             <TextView
@@ -78,7 +79,7 @@
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 app:srcCompat="@drawable/gamesimg" />
 
             <TextView
@@ -128,7 +129,7 @@
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 app:srcCompat="@drawable/teamsimg" />
 
             <TextView

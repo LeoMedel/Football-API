@@ -172,7 +172,8 @@ public class TeamsActivity extends AppCompatActivity {
 
                     Intent info = new Intent(TeamsActivity.this, TeamInfoActivity.class);
 
-                    info.putExtra("team", teamList.get(i).getName()+" ("+teamList.get(i).getShotName()+")");
+                    //info.putExtra("team", teamList.get(i).getName()+" ("+teamList.get(i).getShotName()+")");
+                    info.putExtra("team", teamList.get(i).getName());
                     info.putExtra("urlPlayers", teamList.get(i).getUrlPlayers());
 
                     startActivity(info);

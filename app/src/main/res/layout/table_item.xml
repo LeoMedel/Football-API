@@ -12,7 +12,7 @@
     <TextView
         android:id="@+id/position"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_horizontal|center_vertical"
         android:text="Position"
@@ -23,19 +23,19 @@
     <TextView
         android:id="@+id/team"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_horizontal|center_vertical"
         android:text="Equipe"
         android:textAlignment="center"
         android:textColor="@android:color/background_dark"
-        android:textSize="8sp"
+        android:textSize="10sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/nGames"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_horizontal|center_vertical"
         android:text="No. Games"
@@ -46,7 +46,7 @@
     <TextView
         android:id="@+id/goals"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_horizontal|center_vertical"
         android:text="Goals"
@@ -57,7 +57,7 @@
     <TextView
         android:id="@+id/winner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_horizontal|center_vertical"
         android:text="Win"
@@ -68,7 +68,7 @@
     <TextView
         android:id="@+id/loser"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_horizontal|center_vertical"
         android:text="Losses"
@@ -79,7 +79,7 @@
     <TextView
         android:id="@+id/draws"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_horizontal|center_vertical"
         android:text="Draws"
@@ -90,13 +90,13 @@
     <TextView
         android:id="@+id/points"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_horizontal|center_vertical"
         android:text="Points"
         android:textAlignment="center"
         android:textColor="@android:color/background_dark"
-        android:textSize="8sp"
+        android:textSize="12sp"
         android:textStyle="bold" />
 
 </LinearLayout>
