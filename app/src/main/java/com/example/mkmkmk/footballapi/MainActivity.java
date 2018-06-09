@@ -1,7 +1,12 @@
 package com.example.mkmkmk.footballapi;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
@@ -42,17 +47,73 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        listLeagues = (GridView) findViewById(R.id.leagueList);
-        progress = (ProgressBar) findViewById(R.id.progressLeague);
-        description = (TextView) findViewById(R.id.txtDescription);
-
-
-        new downloadLeagues().execute(URL_API);
+        verifierConnexion();
 
     }
 
+    private void verifierConnexion()
+    {
+        if (! connexionInternet(this))
+        {
+            showAlert(this).show();
+        }
+        else
+        {
+            setContentView(R.layout.activity_main);
+
+            listLeagues = (GridView) findViewById(R.id.leagueList);
+            progress = (ProgressBar) findViewById(R.id.progressLeague);
+            description = (TextView) findViewById(R.id.txtDescription);
+
+            new downloadLeagues().execute(URL_API);
+        }
+    }
+
+
+
+    public boolean connexionInternet(Context context)
+    {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = connectivity.getActiveNetworkInfo();
+
+        if (netInfo != null && netInfo.isConnectedOrConnecting())
+        {
+            NetworkInfo wifi = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            NetworkInfo mobile = connectivity.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if (mobile != null && mobile.isConnectedOrConnecting() || (wifi != null && wifi.isConnectedOrConnecting()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public AlertDialog.Builder showAlert(Context context)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle("Connexion");
+        alert.setMessage("Vous n'avez pas de connexion Internet ou Wifi acces");
+
+        alert.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                verifierConnexion();
+
+            }
+        });
+         return alert;
+
+    }
 
     public class downloadLeagues extends AsyncTask<String, String, String>
     {
@@ -78,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
             String dataLeagues = footAPI.connexionAPI(url);
 
             //condition pour savoir s'il y a des information apres de l'API
-            if (dataLeagues != null)
+            if (dataLeagues != null || dataLeagues != "")
             {
                 try {
 
@@ -107,7 +168,37 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            addCardsLeagues();
+            if (result.equals("Download Succesful"))
+            {
+                addCardsLeagues();
+            }
+            else
+            {
+                Toast.makeText(MainActivity.this, "Error Download Info", Toast.LENGTH_SHORT).show();
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setTitle("Erreur Telechargement");
+                alert.setMessage("Erreur dans le Telechargement des Ligues. \r\n Verifier votre Connexion Wi-fi");
+
+                alert.setPositiveButton("Resseayer", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        new downloadLeagues().execute(URL_API);
+                    }
+                });
+
+                alert.setNegativeButton("Sortir", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+
+                AlertDialog dialog = alert.create();
+                dialog.show();
+
+            }
+
 
             listLeagues.setVisibility(View.VISIBLE);
             progress.setVisibility(View.GONE);

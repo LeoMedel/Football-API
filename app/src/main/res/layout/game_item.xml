@@ -38,7 +38,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0.33"
                 android:orientation="vertical">
 
                 <TextView
@@ -51,47 +51,13 @@
                     android:textColor="@android:color/background_dark" />
 
                 <TextView
-                    android:id="@+id/txtGoalsHome"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="casual"
-                    android:text="goals Home"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/background_dark" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
                     android:id="@+id/textView0"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:fontFamily="casual"
                     android:text="VS"
                     android:textAlignment="center"
                     android:textColor="@android:color/background_dark" />
-
-                <TextView
-                    android:id="@+id/textView00"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="casual"
-                    android:text="-----"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/background_dark" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/txtTeamAway"
@@ -102,10 +68,41 @@
                     android:textAlignment="center"
                     android:textColor="@android:color/background_dark" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtGoalsHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_weight="1"
+                    android:fontFamily="casual"
+                    android:gravity="top|center_vertical|center_horizontal"
+                    android:text="goals Home"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/background_dark" />
+
+                <TextView
+                    android:id="@+id/textView00"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="casual"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/background_dark" />
+
                 <TextView
                     android:id="@+id/txtGoalsAway"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_weight="1"
                     android:fontFamily="casual"
                     android:text="goals Away"
                     android:textAlignment="center"
@@ -120,7 +117,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="casual"
             android:text="STATUS"
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:textColor="@android:color/background_dark"
             android:textSize="10sp" />
 

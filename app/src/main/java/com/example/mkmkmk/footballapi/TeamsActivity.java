@@ -1,6 +1,11 @@
 package com.example.mkmkmk.footballapi;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +14,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,10 +39,8 @@ public class TeamsActivity extends AppCompatActivity {
     String teamName;
 
     JSONObject jsonTeams;
-
     TeamAdapter adapter;
 
-    TextView info;
     TextView nameTeam;
     ProgressBar progressTeams;
     ListView listViewTeams;
@@ -44,19 +48,75 @@ public class TeamsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teams);
 
-        urlTeams = getIntent().getStringExtra("urlTeams");
-        teamName = getIntent().getStringExtra("league");
+        verifierConnexion();
 
-        info = (TextView) findViewById(R.id.txtTeams);
-        nameTeam = (TextView) findViewById(R.id.txtTeamName);
-        progressTeams = (ProgressBar) findViewById(R.id.progressBarTeams);
-        listViewTeams = (ListView) findViewById(R.id.ListTeams);
+    }
 
-        info.setText(urlTeams);
-        nameTeam.setText(teamName);
-        new downloadTeams().execute(urlTeams);
+
+    private void verifierConnexion()
+    {
+        if (! connexionInternet(this))
+        {
+            showAlert(this).show();
+        }
+        else
+        {
+            setContentView(R.layout.activity_teams);
+
+            urlTeams = getIntent().getStringExtra("urlTeams");
+            teamName = getIntent().getStringExtra("league");
+
+            nameTeam = (TextView) findViewById(R.id.txtTeamName);
+            progressTeams = (ProgressBar) findViewById(R.id.progressBarTeams);
+            listViewTeams = (ListView) findViewById(R.id.ListTeams);
+
+            nameTeam.setText(teamName);
+            new downloadTeams().execute(urlTeams);
+        }
+    }
+
+    public boolean connexionInternet(Context context)
+    {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = connectivity.getActiveNetworkInfo();
+
+        if (netInfo != null && netInfo.isConnectedOrConnecting())
+        {
+            NetworkInfo wifi = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            NetworkInfo mobile = connectivity.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if (mobile != null && mobile.isConnectedOrConnecting() || (wifi != null && wifi.isConnectedOrConnecting()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public AlertDialog.Builder showAlert(Context context)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle("Connexion. Equipes");
+        alert.setMessage("Imposible telecharge des Equipes. \r\n Verifier la connexion d'Internet");
+
+        alert.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                verifierConnexion();
+
+            }
+        });
+        return alert;
+
     }
 
 
@@ -112,6 +172,7 @@ public class TeamsActivity extends AppCompatActivity {
             super.onPostExecute(s);
             addcardsTeams();
             progressTeams.setVisibility(View.GONE);
+            listViewTeams.setVisibility(View.VISIBLE);
 
         }
     }

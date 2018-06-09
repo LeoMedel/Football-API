@@ -1,5 +1,6 @@
 package com.example.mkmkmk.footballapi.ConnexionAPI;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -62,7 +63,9 @@ public class HttpFootballAPI {
 
             while ((line = reader.readLine()) != null) {
                 sb.append(line).append('\n');
+                Log.i("DEBUG Stream API", "read...  "+sb.toString());
             }
+            Log.i("DEBUG data API FOOT", "Finish reading : "+sb.toString());
 
         } catch (IOException e) {
             e.printStackTrace();

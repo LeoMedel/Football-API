@@ -1,5 +1,10 @@
 package com.example.mkmkmk.footballapi;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,19 +42,80 @@ public class GamesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_games);
 
-        urlGames = getIntent().getStringExtra("urlGames");
-        leagueName = getIntent().getStringExtra("league");
+        verifierConnexion();
 
-        info = (TextView) findViewById(R.id.txtGames);
-        progresGames = (ProgressBar) findViewById(R.id.progressBarGames);
-        gridViewGames = (GridView) findViewById(R.id.gridGames);
-
-        info.setText(leagueName+ "\r\n GAMES");
-
-        new downloadGames().execute(urlGames);
     }
+
+
+    public boolean connexionInternet(Context context)
+    {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = connectivity.getActiveNetworkInfo();
+
+        if (netInfo != null && netInfo.isConnectedOrConnecting())
+        {
+            NetworkInfo wifi = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            NetworkInfo mobile = connectivity.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if (mobile != null && mobile.isConnectedOrConnecting() || (wifi != null && wifi.isConnectedOrConnecting()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public AlertDialog.Builder showAlert(Context context)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle("Connexion. Games");
+        alert.setMessage("Impossible telecharge des matchs de la ligue. \r\n Verifier connexion d'Internet");
+
+        alert.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                verifierConnexion();
+
+            }
+        });
+        return alert;
+
+    }
+
+
+    private void verifierConnexion()
+    {
+        if (! connexionInternet(this))
+        {
+            showAlert(this).show();
+        }
+        else
+        {
+            setContentView(R.layout.activity_games);
+
+            urlGames = getIntent().getStringExtra("urlGames");
+            leagueName = getIntent().getStringExtra("league");
+
+            info = (TextView) findViewById(R.id.txtGames);
+            progresGames = (ProgressBar) findViewById(R.id.progressBarGames);
+            gridViewGames = (GridView) findViewById(R.id.gridGames);
+
+            info.setText(leagueName+ "\r\n GAMES");
+
+            new downloadGames().execute(urlGames);
+
+        }
+    }
+
 
     public class downloadGames extends AsyncTask<String, String, String>{
 

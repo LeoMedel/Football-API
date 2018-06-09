@@ -1,12 +1,18 @@
 package com.example.mkmkmk.footballapi;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,7 +38,7 @@ public class TeamInfoActivity extends AppCompatActivity {
     String urlPlayers;
     String teamName;
 
-    TextView information;
+    TextView information, player, position, jerseyN, birthDate, nation, contractDays;
     ProgressBar progressPlayers;
 
     JSONObject jsonPlayers;
@@ -44,18 +50,89 @@ public class TeamInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_team_info);
 
-        teamName = getIntent().getStringExtra("team");
-        urlPlayers = getIntent().getStringExtra("urlPlayers");
+        verifierConnexion();
 
-        information = (TextView) findViewById(R.id.txtInfo);
-        progressPlayers = (ProgressBar) findViewById(R.id.progressBarPlayers);
-        listViewPlayers = (ListView) findViewById(R.id.ListPlayers);
+    }
 
-        information.setText(teamName+"\r\n "+urlPlayers);
+    private void verifierConnexion()
+    {
+        if (! connexionInternet(this))
+        {
+            showAlert(this).show();
+        }
+        else
+        {
+            setContentView(R.layout.activity_team_info);
 
-        new downloadPlayers().execute(urlPlayers);
+            teamName = getIntent().getStringExtra("team");
+            urlPlayers = getIntent().getStringExtra("urlPlayers");
+
+            information = (TextView) findViewById(R.id.txtInfo);
+            player = (TextView) findViewById(R.id.txtName);
+            position = (TextView) findViewById(R.id.txtPosition);
+            jerseyN = (TextView) findViewById(R.id.txtNumber);
+            birthDate = (TextView) findViewById(R.id.txtBirthday);
+            nation = (TextView) findViewById(R.id.txtNationality);
+            contractDays = (TextView) findViewById(R.id.txtContract);
+
+            progressPlayers = (ProgressBar) findViewById(R.id.progressBarPlayers);
+            listViewPlayers = (ListView) findViewById(R.id.ListPlayers);
+
+            information.setText(teamName);
+
+            player.setText("Choisissez un joueur");
+            position.setText("'    '      '");
+            jerseyN.setText("'     '     '");
+            birthDate.setText("'     '     '");
+            nation.setText("'     '     '");
+            contractDays.setText("'     '     '");
+
+            new downloadPlayers().execute(urlPlayers);
+        }
+    }
+
+    public boolean connexionInternet(Context context)
+    {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = connectivity.getActiveNetworkInfo();
+
+        if (netInfo != null && netInfo.isConnectedOrConnecting())
+        {
+            NetworkInfo wifi = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            NetworkInfo mobile = connectivity.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if (mobile != null && mobile.isConnectedOrConnecting() || (wifi != null && wifi.isConnectedOrConnecting()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public AlertDialog.Builder showAlert(Context context)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle("Connexion. Teams Information");
+        alert.setMessage("Imposible telecharge information de l'equipe. \r\n Verifier connexion d'Internet");
+
+        alert.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                verifierConnexion();
+
+            }
+        });
+        return alert;
+
     }
 
     public void setUbicationTeam(View view)
@@ -64,6 +141,7 @@ public class TeamInfoActivity extends AppCompatActivity {
         teams.putExtra("team", teamName);
         startActivity(teams);
     }
+
 
 
     public class downloadPlayers extends AsyncTask<String, String, String>{
@@ -128,6 +206,7 @@ public class TeamInfoActivity extends AppCompatActivity {
         final List<Player> playerList = new ArrayList<>();
 
         try {
+
             teamsLigue = jsonPlayers.getJSONArray("players");
 
             for (int i = 0; i < teamsLigue.length(); i++)
@@ -135,25 +214,30 @@ public class TeamInfoActivity extends AppCompatActivity {
                 Log.i("DEBUG EQUIPE", "Creation des equipes");
 
                 String namePlayer = teamsLigue.getJSONObject(i).getString("name");
+                Log.i("DEBUG PLAYERS", "Name "+namePlayer);
                 String positionPlayer = teamsLigue.getJSONObject(i).getString("position");
+                Log.i("DEBUG PLAYERS", "Position "+positionPlayer);
                 String jerseyNumber = teamsLigue.getJSONObject(i).getString("jerseyNumber");
+                Log.i("DEBUG PLAYERS", "Jesrsey "+jerseyNumber);
                 String birthday = teamsLigue.getJSONObject(i).getString("dateOfBirth");
+                Log.i("DEBUG PLAYERS", "birthday "+birthday);
                 String nationality = teamsLigue.getJSONObject(i).getString("nationality");
+                Log.i("DEBUG PLAYERS", "Nationality "+nationality);
                 String contract = teamsLigue.getJSONObject(i).getString("contractUntil");
+                Log.i("DEBUG PLAYERS", "Contract "+contract);
 
                 playerList.add(new Player(namePlayer, positionPlayer, jerseyNumber+"", birthday, nationality, contract));
 
             }
 
             adapter = new PlayerAdapter(TeamInfoActivity.this, playerList);
-
             listViewPlayers.setAdapter(adapter);
 
 
             listViewPlayers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Toast.makeText(TeamInfoActivity.this, ""+playerList.get(i).getPlayerName(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(TeamInfoActivity.this, ""+playerList.get(i).getPlayerName(), Toast.LENGTH_SHORT).show();
 
                     StringBuffer infoPlayer = new StringBuffer();
 
@@ -164,17 +248,13 @@ public class TeamInfoActivity extends AppCompatActivity {
                     infoPlayer.append("Nationality : "+playerList.get(i).getNationality()+"\n\r");
                     infoPlayer.append("Contract : "+playerList.get(i).getContract()+"\n\r");
 
-
-
-                information.setText(infoPlayer.toString());
-
-                    //Intent info = new Intent(TeamInfoActivity.this, Player.class);
-
-                    //info.putExtra("team", teamList.get(i).getName()+" ("+teamList.get(i).getShotName()+")");
-                    //info.putExtra("urlPlayers", teamList.get(i).getUrlPlayers());
-
-                    //startActivity(info);
-
+                    player.setText(playerList.get(i).getPlayerName().toString());
+                    position.setText(playerList.get(i).getPositionPlayer().toString());
+                    jerseyN.setText(playerList.get(i).getJerseyNumber().toString());
+                    birthDate.setText(playerList.get(i).getBirthday().toString());
+                    nation.setText(playerList.get(i).getNationality().toString());
+                    contractDays.setText(playerList.get(i).getContract().toString());
+                //information.setText(infoPlayer.toString());
                 }
             });
 

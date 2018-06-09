@@ -1,11 +1,17 @@
 package com.example.mkmkmk.footballapi;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -39,18 +45,78 @@ public class TableActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_table);
 
-        urlTable = getIntent().getStringExtra("urlTable");
-        leagueName = getIntent().getStringExtra("league");
+        verifierConnexion();
 
-        info = (TextView) findViewById(R.id.txtDescription);
-        progressBarTable = (ProgressBar) findViewById(R.id.progressTable);
-        itemTable = (ListView) findViewById(R.id.itemsTable);
-        cTable = (CardView) findViewById(R.id.cardTable);
+    }
 
-        info.setText(leagueName);
-        new downloadTable().execute(urlTable);
+
+
+    private void verifierConnexion()
+    {
+        if (! connexionInternet(this))
+        {
+            showAlert(this).show();
+        }
+        else
+        {
+            setContentView(R.layout.activity_table);
+
+            urlTable = getIntent().getStringExtra("urlTable");
+            leagueName = getIntent().getStringExtra("league");
+
+            info = (TextView) findViewById(R.id.txtDescription);
+            progressBarTable = (ProgressBar) findViewById(R.id.progressTable);
+            itemTable = (ListView) findViewById(R.id.itemsTable);
+            cTable = (CardView) findViewById(R.id.cardTable);
+
+            info.setText(leagueName);
+            new downloadTable().execute(urlTable);
+
+        }
+    }
+
+
+    public boolean connexionInternet(Context context)
+    {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = connectivity.getActiveNetworkInfo();
+
+        if (netInfo != null && netInfo.isConnectedOrConnecting())
+        {
+            NetworkInfo wifi = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            NetworkInfo mobile = connectivity.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if (mobile != null && mobile.isConnectedOrConnecting() || (wifi != null && wifi.isConnectedOrConnecting()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public AlertDialog.Builder showAlert(Context context)
+    {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle("Connexion. Table generale");
+        alert.setMessage("Impossible telecharge Table de la Ligue. \r\n Verifier connexion d'Internet");
+
+        alert.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                verifierConnexion();
+
+            }
+        });
+        return alert;
 
     }
 

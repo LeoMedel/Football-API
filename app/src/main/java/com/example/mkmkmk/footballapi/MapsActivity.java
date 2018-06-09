@@ -32,6 +32,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     String teamName;
+    String urlMaps;
 
     private Marker marker;
     double latitude = 0.0;
@@ -54,9 +55,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String nameFormat;
         nameFormat = team.replaceAll("\\s", "+");
 
-        String url = getUrl(nameFormat);
+        urlMaps = getUrl(nameFormat);
 
-        new GetStadeTeam().execute(url);
+        new GetStadeTeam().execute(urlMaps);
 
 
     }
@@ -175,6 +176,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         protected void onPreExecute() {
             super.onPreExecute();
 
+            Toast.makeText(MapsActivity.this, "url Maps"+urlMaps, Toast.LENGTH_SHORT).show();
+
         }
 
         @Override
@@ -207,10 +210,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (stadeList.size()==0 || stadeList ==null)
             {
                 Toast.makeText(MapsActivity.this, "Error GoogleMaps", Toast.LENGTH_SHORT).show();
+                //myUbication();
             }
             else
             {
                 showStade(stadeList);
+                //myUbication();
             }
 
         }
@@ -218,6 +223,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         private void showStade(List<HashMap<String, String>> stadeList) {
 
             mMap.clear();
+
             for (int i = 0; i < stadeList.size(); i++)
             {
                 MarkerOptions markerOptions = new MarkerOptions();
