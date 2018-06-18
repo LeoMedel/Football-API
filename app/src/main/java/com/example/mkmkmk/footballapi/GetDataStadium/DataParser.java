@@ -82,37 +82,18 @@ public class DataParser {
         try {
             if(status.equals("OK"))
             {
-                /*
-                for (int i = 0; i < jsonArray.length(); i++)
-                {
-                    if (i == 2)
-                    {
-                        city = jsonArray.getJSONObject(i).getString("long_name");
-                    }
-                    else if(i == 5)
-                    {
-                        country = jsonArray.getJSONObject(i).getString("long_name");
-                    }
-                }
-                */
-
-                //String jsonArray = stadeInfoJson.getString("address_components");
                 address = stadeInfoJson.getString("formatted_address");
                 name = stadeInfoJson.getString("name");
                 latitude = stadeInfoJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
                 longitude = stadeInfoJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
             }
 
-            //stadePlaceMap.put("city", city);
-            //stadePlaceMap.put("country", country);
 
             stadePlaceMap.put("address", address);
             stadePlaceMap.put("name", name);
             stadePlaceMap.put("latitude", latitude);
             stadePlaceMap.put("longitude", longitude);
 
-            //Log.i("DEBUG STADE LIST", "city"+stadePlaceMap.get("city"));
-            //Log.i("DEBUG STADE LIST", "country"+stadePlaceMap.get("country"));
             Log.i("DEBUG STADE LIST", "address  "+stadePlaceMap.get("address"));
             Log.i("DEBUG STADE LIST", "name  "+stadePlaceMap.get("name"));
             Log.i("DEBUG STADE LIST", "latitude  "+stadePlaceMap.get("latitude"));
@@ -122,6 +103,8 @@ public class DataParser {
 
         } catch (JSONException e) {
             e.printStackTrace();
+
+            return stadePlaceMap;
         }
 
         return stadePlaceMap;

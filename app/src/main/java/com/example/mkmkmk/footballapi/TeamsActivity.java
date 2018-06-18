@@ -229,15 +229,24 @@ public class TeamsActivity extends AppCompatActivity {
             listViewTeams.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Toast.makeText(TeamsActivity.this, ""+teamList.get(i).getName(), Toast.LENGTH_SHORT).show();
 
-                    Intent info = new Intent(TeamsActivity.this, TeamInfoActivity.class);
+                    if (teamName.equals("Campeonato Brasileiro da Série A (BSA)") || teamName.equals("Championship 2017/18 (ELC)") || teamName.equals("League One 2017/18 (EL1)") || teamName.equals("League Two 2017/18 (EL2)") || teamName.equals("Serie B 2017/18 (SB)"))
+                    {
+                        Toast.makeText(TeamsActivity.this, "Joueurs indisponibles", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
 
-                    //info.putExtra("team", teamList.get(i).getName()+" ("+teamList.get(i).getShotName()+")");
-                    info.putExtra("team", teamList.get(i).getName());
-                    info.putExtra("urlPlayers", teamList.get(i).getUrlPlayers());
+                        Toast.makeText(TeamsActivity.this, ""+teamList.get(i).getName(), Toast.LENGTH_SHORT).show();
+                        Intent info = new Intent(TeamsActivity.this, TeamInfoActivity.class);
 
-                    startActivity(info);
+                        //info.putExtra("team", teamList.get(i).getName()+" ("+teamList.get(i).getShotName()+")");
+                        info.putExtra("team", teamList.get(i).getName());
+                        info.putExtra("urlPlayers", teamList.get(i).getUrlPlayers());
+
+                        startActivity(info);
+                    }
+
 
                 }
             });

@@ -1,5 +1,6 @@
 package com.example.mkmkmk.footballapi;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,12 +8,17 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -45,6 +51,24 @@ public class TeamInfoActivity extends AppCompatActivity {
     PlayerAdapter adapter;
 
     ListView listViewPlayers;
+    ImageButton ubicationImg;
+
+
+    private static final int PERMISSION_GPS = 1;
+
+    protected boolean shouldAskPermissions() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    @TargetApi(23)
+    protected void askPermissions() {
+        String[] permissions = {
+                "android.permission.ACCESS_COARSE_LOCATION",
+                "android.permission.ACCESS_FINE_LOCATION"
+        };
+        int requestCode = 200;
+        requestPermissions(permissions, requestCode);
+    }
 
 
     @Override
@@ -53,6 +77,9 @@ public class TeamInfoActivity extends AppCompatActivity {
 
         verifierConnexion();
 
+        if (shouldAskPermissions()) {
+            askPermissions();
+        }
     }
 
     private void verifierConnexion()
@@ -87,6 +114,11 @@ public class TeamInfoActivity extends AppCompatActivity {
             birthDate.setText("'     '     '");
             nation.setText("'     '     '");
             contractDays.setText("'     '     '");
+
+            ubicationImg = (ImageButton) findViewById(R.id.imgUbication);
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.animation_ubication);
+            //RotateAnimation anim = (RotateAnimation) AnimationUtils.loadAnimation(this, R.anim.animation_ubication);
+            ubicationImg.setAnimation(animation);
 
             new downloadPlayers().execute(urlPlayers);
         }

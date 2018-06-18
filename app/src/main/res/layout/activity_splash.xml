@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/real"
+    android:background="@drawable/realsplash"
     android:orientation="vertical"
     tools:context="com.example.mkmkmk.footballapi.SplashActivity">
 
@@ -21,7 +21,6 @@
             android:layout_height="match_parent"
             android:fontFamily="casual"
             android:gravity="center_horizontal|center_vertical"
-            android:text="FOOTBALL API"
             android:textAlignment="center"
             android:textColor="@android:color/holo_green_light"
             android:textSize="60sp"

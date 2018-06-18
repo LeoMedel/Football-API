@@ -58,11 +58,11 @@ public class LeagueActivity extends AppCompatActivity {
         }
         else if (nameLeague.equals("DFB-Pokal 2017/18 (DFB)"))
         {
-            Toast.makeText(this, "Table Indispnible", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Table Indisponible", Toast.LENGTH_SHORT).show();
         }
         else if (nameLeague.equals("Australian A-League (AAL)"))
         {
-            Toast.makeText(this, "Table Indispnible", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Table Indisponible", Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -79,7 +79,7 @@ public class LeagueActivity extends AppCompatActivity {
     {
         if (nameLeague.equals("Australian A-League (AAL)"))
         {
-            Toast.makeText(this, "Games Indispnibles", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Games Indisponibles", Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -95,7 +95,7 @@ public class LeagueActivity extends AppCompatActivity {
     {
         if (nameLeague.equals("Australian A-League (AAL)"))
         {
-            Toast.makeText(this, "Games Indispnibles", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Games Indisponibles", Toast.LENGTH_SHORT).show();
         }
         else
         {

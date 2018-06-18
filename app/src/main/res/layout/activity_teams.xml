@@ -19,12 +19,22 @@
         android:textSize="36sp"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/txtInfoListe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:fontFamily="casual"
+        android:text="Voici, vous trouverez une liste avec les équipes de la Ligue. Pour regarder plus des details, cliquer sur la liste dans l'équipe que vous voulez voir."
+        android:textColor="@android:color/background_light" />
+
     <ProgressBar
         android:id="@+id/progressBarTeams"
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp" />
+        android:layout_marginTop="100dp" />
 
     <ListView
         android:id="@+id/ListTeams"

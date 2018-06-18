@@ -2,6 +2,7 @@ package com.example.mkmkmk.footballapi;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -24,6 +25,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +51,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         teamName = getIntent().getStringExtra("team");
-
         Toast.makeText(this, teamName, Toast.LENGTH_SHORT).show();
 
         String team = teamName;
@@ -56,10 +58,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         nameFormat = team.replaceAll("\\s", "+");
 
         urlMaps = getUrl(nameFormat);
-
-        new GetStadeTeam().execute(urlMaps);
-
-
     }
 
 
@@ -77,35 +75,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         myUbication();
+
+        Object dataTransfer[] = new Object[3];
+
+        dataTransfer[0] = urlMaps;
+        //finalement, on ajoute le Mot-clé
+        dataTransfer[1] = latitude;
+        dataTransfer[2] = longitude;
+
+        new GetStadeTeam().execute(dataTransfer);
     }
-
-
-    public void addMarkerTeam(double latitude, double longitude, String stadeName)
-    {
-        Marker markerTeam;
-        LatLng coordonneeStade = new LatLng(latitude, longitude);
-        CameraUpdate stadeUbication = CameraUpdateFactory.newLatLngZoom(coordonneeStade, 5);
-
-        markerTeam = mMap.addMarker(new MarkerOptions()
-                .position(coordonneeStade)
-                .title("Stade de "+stadeName)
-                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)));
-        mMap.animateCamera(stadeUbication);
-
-    }
-
 
     private void addMarker(double lat, double lng) {
         LatLng coordenadas = new LatLng(lat, lng);
 
-        CameraUpdate myUbication = CameraUpdateFactory.newLatLngZoom(coordenadas, 16);
+        //CameraUpdate myUbication = CameraUpdateFactory.newLatLngZoom(coordenadas, 16);
 
         if (marker != null) {
             marker.remove();
         }
 
-        marker = mMap.addMarker(new MarkerOptions().position(coordenadas).title("My Ubication").icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)));
-        mMap.animateCamera(myUbication);
+        marker = mMap.addMarker(new MarkerOptions()
+                .position(coordenadas).title("Vous êtes ici")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.player)));
+        //mMap.animateCamera(myUbication);
     }
 
     private void updateUbication(Location location) {
@@ -153,10 +146,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String getUrl(String teamName)
     {
         //on commence avec une variable qui va ajouter les direfents parties qui vont compposer l'url de demande a Google place
-        //StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/geocode/json?address=Estadio");
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?query=Stadium");
         googlePlaceUrl.append("+of+"+teamName);
-        //Google API PLACE, different Google Maps
+        //Google API KEY PLACE, different Google Maps
         googlePlaceUrl.append("&key=AIzaSyCw3naphbRCLrt7c10B-riAq9hIOzyg0kQ");
 
         Log.i("DEBUG CreateURL", googlePlaceUrl.toString());
@@ -169,27 +161,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         String dataStade;
-        GoogleMap map;
         String url;
-        //ProgressBar progressStade;
+        double myLatitude;
+        double myLongitude;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            Toast.makeText(MapsActivity.this, "url Maps"+urlMaps, Toast.LENGTH_SHORT).show();
-
         }
 
         @Override
         protected String doInBackground(Object... objects) {
 
-            //map = (GoogleMap) objects[0];
             url = (String) objects[0];
-            //progressStade = (ProgressBar) objects[2];
-
-            //progressStade.setVisibility(View.VISIBLE);
-
+            myLatitude = (double) objects[1];
+            myLongitude = (double) objects[2];
             DownloadUrl downloadUrl = new DownloadUrl();
 
             dataStade = downloadUrl.readUrl(url);
@@ -205,18 +191,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             List<HashMap<String, String>> stadeList = null;
 
             DataParser dataParser = new DataParser();
-
             stadeList = dataParser.parserData(result);
 
             if (stadeList.size()==0 || stadeList ==null)
             {
-                Toast.makeText(MapsActivity.this, "Error GoogleMaps", Toast.LENGTH_SHORT).show();
-                //myUbication();
+                Toast.makeText(MapsActivity.this, "Error Google Maps Places", Toast.LENGTH_SHORT).show();
+                finish();
             }
             else
             {
                 showStade(stadeList);
-                //myUbication();
             }
 
         }
@@ -231,15 +215,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 HashMap<String, String> stadePlace = stadeList.get(i);
 
-                //String city = stadePlace.get("city");
-                //String county = stadePlace.get("country");
                 String address = stadePlace.get("address");
                 String nameStade = stadePlace.get("name");
                 double latitude = Double.parseDouble(stadePlace.get("latitude"));
                 double longitude = Double.parseDouble(stadePlace.get("longitude"));
 
-                //Log.i("DEBUG STADE MARKER", "city"+city);
-                //Log.i("DEBUG STADE MARKER", "country"+county);
                 Log.i("DEBUG STADE MARKER", "address "+address);
                 Log.i("DEBUG STADE MARKER", "name Stade "+nameStade);
                 Log.i("DEBUG STADE MARKER", "latitude "+latitude);
@@ -250,13 +230,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 markerOptions.position(latLng);
 
                 markerOptions.title("Stade de "+teamName+", "+nameStade);
-
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.stadiumicon));
 
 
                 mMap.addMarker(markerOptions);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(4.50f));
+                myUbication();
+
+                //variables de type Location avec les coordonnes correspondant de stade et la notre, pour pouvoir avoir la distance
+                Location loc = new Location("Location 1");
+                loc.setLatitude(latitude);
+                loc.setLongitude(longitude);
+
+                Location loc2 = new Location("Location 2");
+                loc2.setLatitude(myLatitude);
+                loc2.setLongitude(myLongitude);
+
+                //on peut obtenir la distance
+                double distanceM = loc.distanceTo(loc2);
+                double distanceK = distanceM/1000;
+
+                //finalement, on va desiner la ligne dans la carte
+                Polyline line = mMap.addPolyline( new PolylineOptions()
+                        .add(new LatLng(latitude, longitude), new LatLng(myLatitude,myLongitude))
+                        .width(5)
+                        .color(Color.GREEN));
+
+                /* On peut ajouter une action dans le marker
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+                        return true;
+                    }
+                });
+                */
             }
 
         }

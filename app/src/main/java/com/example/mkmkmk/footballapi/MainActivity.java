@@ -1,5 +1,6 @@
 package com.example.mkmkmk.footballapi;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +9,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,11 +46,30 @@ public class MainActivity extends AppCompatActivity {
 
     private String URL_API = "http://api.football-data.org/v1/competitions/?season=2017";
 
+    protected boolean shouldAskPermissions() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    @TargetApi(23)
+    protected void askPermissions() {
+        String[] permissions = {
+                "android.permission.INTERNET",
+                "android.permission.ACCESS_NETWORK_STATE",
+                "android.permission.ACCESS_WIFI_STATE"
+        };
+        int requestCode = 200;
+        requestPermissions(permissions, requestCode);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         verifierConnexion();
+
+        if (shouldAskPermissions()) {
+            askPermissions();
+        }
 
     }
 
@@ -248,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (leagueList.get(i).getLeague().equals("Australian A-League (AAL)"))
                     {
-                        Toast.makeText(MainActivity.this, "League Indispnible", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "League Indisponible", Toast.LENGTH_SHORT).show();
                     }
                     else
                     {

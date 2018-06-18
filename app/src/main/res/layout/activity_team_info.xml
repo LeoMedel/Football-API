@@ -31,14 +31,17 @@
             android:textSize="24sp" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/imgUbication"
             android:layout_width="150dp"
             android:layout_height="70dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:background="@android:color/background_dark"
             android:onClick="setUbicationTeam"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ubicacion" />
+            app:srcCompat="@drawable/ubicationicon" />
 
     </LinearLayout>
 
