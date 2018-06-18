@@ -71,17 +71,18 @@ public class DataParser {
     {
         HashMap<String, String> stadePlaceMap = new HashMap<>();
 
-        String city = "-NA-";
-        String country = "-NA-";
+        //String city = "-NA-";
+        //String country = "-NA-";
         String address = "-NA-";
+        String name = "-NA-";
         String latitude = "";
         String longitude = "";
 
-        try {
-            JSONArray jsonArray = stadeInfoJson.getJSONArray("address_components");
 
+        try {
             if(status.equals("OK"))
             {
+                /*
                 for (int i = 0; i < jsonArray.length(); i++)
                 {
                     if (i == 2)
@@ -93,23 +94,29 @@ public class DataParser {
                         country = jsonArray.getJSONObject(i).getString("long_name");
                     }
                 }
+                */
 
+                //String jsonArray = stadeInfoJson.getString("address_components");
                 address = stadeInfoJson.getString("formatted_address");
+                name = stadeInfoJson.getString("name");
                 latitude = stadeInfoJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
                 longitude = stadeInfoJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
             }
 
-            stadePlaceMap.put("city", city);
-            stadePlaceMap.put("country", country);
+            //stadePlaceMap.put("city", city);
+            //stadePlaceMap.put("country", country);
+
             stadePlaceMap.put("address", address);
+            stadePlaceMap.put("name", name);
             stadePlaceMap.put("latitude", latitude);
             stadePlaceMap.put("longitude", longitude);
 
-            Log.i("DEBUG STADE LIST", "city"+stadePlaceMap.get("city"));
-            Log.i("DEBUG STADE LIST", "country"+stadePlaceMap.get("country"));
-            Log.i("DEBUG STADE LIST", "address"+stadePlaceMap.get("address"));
-            Log.i("DEBUG STADE LIST", "latitude"+stadePlaceMap.get("latitude"));
-            Log.i("DEBUG STADE LIST", "longitude"+stadePlaceMap.get("longitude"));
+            //Log.i("DEBUG STADE LIST", "city"+stadePlaceMap.get("city"));
+            //Log.i("DEBUG STADE LIST", "country"+stadePlaceMap.get("country"));
+            Log.i("DEBUG STADE LIST", "address  "+stadePlaceMap.get("address"));
+            Log.i("DEBUG STADE LIST", "name  "+stadePlaceMap.get("name"));
+            Log.i("DEBUG STADE LIST", "latitude  "+stadePlaceMap.get("latitude"));
+            Log.i("DEBUG STADE LIST", "longitude  "+stadePlaceMap.get("longitude"));
 
 
 

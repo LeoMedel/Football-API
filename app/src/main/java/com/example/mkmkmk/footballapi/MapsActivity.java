@@ -153,8 +153,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String getUrl(String teamName)
     {
         //on commence avec une variable qui va ajouter les direfents parties qui vont compposer l'url de demande a Google place
-        StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/geocode/json?address=Estadio");
-        googlePlaceUrl.append("+"+teamName);
+        //StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/geocode/json?address=Estadio");
+        StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?query=Stadium");
+        googlePlaceUrl.append("+of+"+teamName);
         //Google API PLACE, different Google Maps
         googlePlaceUrl.append("&key=AIzaSyCw3naphbRCLrt7c10B-riAq9hIOzyg0kQ");
 
@@ -230,23 +231,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 HashMap<String, String> stadePlace = stadeList.get(i);
 
-                String city = stadePlace.get("city");
-                String county = stadePlace.get("country");
+                //String city = stadePlace.get("city");
+                //String county = stadePlace.get("country");
                 String address = stadePlace.get("address");
+                String nameStade = stadePlace.get("name");
                 double latitude = Double.parseDouble(stadePlace.get("latitude"));
                 double longitude = Double.parseDouble(stadePlace.get("longitude"));
 
-                Log.i("DEBUG STADE MARKER", "city"+city);
-                Log.i("DEBUG STADE MARKER", "country"+county);
-                Log.i("DEBUG STADE MARKER", "address"+address);
-                Log.i("DEBUG STADE MARKER", "latitude"+latitude);
-                Log.i("DEBUG STADE MARKER", "longitude"+longitude);
+                //Log.i("DEBUG STADE MARKER", "city"+city);
+                //Log.i("DEBUG STADE MARKER", "country"+county);
+                Log.i("DEBUG STADE MARKER", "address "+address);
+                Log.i("DEBUG STADE MARKER", "name Stade "+nameStade);
+                Log.i("DEBUG STADE MARKER", "latitude "+latitude);
+                Log.i("DEBUG STADE MARKER", "longitude "+longitude);
 
                 LatLng latLng = new LatLng(latitude, longitude);
 
                 markerOptions.position(latLng);
 
-                markerOptions.title("Stade de "+teamName+" "+ city+" "+county+" "+address);
+                markerOptions.title("Stade de "+teamName+", "+nameStade);
 
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
